@@ -1,0 +1,22 @@
+.data
+    n1: .word 0        # Reserve memory space for first number (not used here)
+    n2: .word 0        # Reserve memory space for second number (not used here)
+
+.text
+
+    li $v0, 5          # Syscall 5 = read integer
+    syscall            # Read first integer from user
+    move $t0, $v0      # Store first input value into register $t0
+
+    li $v0, 5          # Syscall 5 = read integer
+    syscall            # Read second integer from user
+    move $t1, $v0      # Store second input value into register $t1
+
+    add $t2, $t1, $t0  # Add $t1 and $t0, store result in $t2
+
+    move $a0, $t2      # Move result into $a0 (argument register for printing)
+    li $v0, 1          # Syscall 1 = print integer
+    syscall            # Print the sum
+
+    li $v0, 10         # Syscall 10 = exit program
+    syscall            # Terminate the program
