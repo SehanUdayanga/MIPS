@@ -1,0 +1,40 @@
+.data 
+    # enter: .asciiz "Enter the value :"   # (Commented) string for input message
+    value: .word 0                        # Reserve memory to store the input value
+    
+.text
+    
+    # li $v0,4                             # (Commented) syscall for print string
+    # la $a0,enter                         # (Commented) load address of string
+    # syscall                              # (Commented) print string
+    
+    li $v0,5                               # Load syscall 5 (read integer)
+    syscall                                # Read integer from user
+    move $t0,$v0                           # Copy input value into $t0
+    sw $v0,value                           # Store input value into memory (value)
+    
+    li $t1,2                               # Load 2 into $t1 (divisor for binary conversion)
+    li $t3,1                               # Load 1 into $t3 (used for comparison)
+    move $t2,$zero                         # Initialize $t2 to 0 (will store quotient)
+    
+
+loop:
+    
+    div $t0,$t1                            # Divide $t0 by 2
+    mfhi $a0                               # Move remainder to $a0 (binary digit)
+    mflo $t2                               # Move quotient to $t2
+    
+    li $v0,1                               # Load syscall 1 (print integer)
+    syscall                                # Print remainder (binary digit)
+    
+    beq $t3,$t2,target                     # If quotient == 1, jump to target
+    
+    j loop                                 # Otherwise repeat loop
+    
+target:
+    move $a0,$t2                           # Move quotient (1) to $a0
+    li $v0,1                               # Load syscall 1 (print integer)
+    syscall                                # Print final digit
+    
+    li $v0,10                              # Load syscall 10 (exit)
+    syscall                                # Exit program
